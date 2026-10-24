@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large generated HTML files (too large for GitHub, use relative PNGs instead)
+output/README.html
+output/model_outputs_report.html
+
+# Temp / scratch
+output/build_readme.py
+output/generate_readme.py
+output/generate_report.py
+
+# Secrets / credentials
+.env
+*.pem
+*.key
+secrets.json
+
+# Node
+node_modules/
+
+# Compiled model binaries > 100MB (if any)
+*.pkl
+*.h5

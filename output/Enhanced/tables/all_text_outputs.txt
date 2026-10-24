@@ -1,0 +1,577 @@
+### Cell 2
+Python libraries loaded successfully
+  NumPy        : 2.4.4
+  Pandas       : 3.0.2
+  SciPy        : 1.17.1
+  Scikit-learn : 1.8.0
+  Seaborn      : 0.13.2
+
+
+### Cell 3
+Output directory : /content/outputs
+Figures directory: /content/outputs/figures
+
+
+### Cell 5
+Loaded : final_mobile_dataset.csv
+Shape  : 1,056 rows x 14 columns
+
+
+### Cell 5
+    Processor    Brand  Ram_GB  Rom_GB  Battery_Capacity  Display_Size(Inches) Display_Quality  Refresh_Rate  Rear_Camera_MP  Front_Camera_MP  Android  IOS  Version   Price
+0    MediaTek  OnePlus       8     128              7100                  6.77          AMOLED           120            50.0             16.0        1    0       15   22999
+1  Snapdragon     vivo       8     128              6000                  6.77          AMOLED           120            50.0             50.0        1    0       15   34999
+2    MediaTek   realme       8     256              7000                  6.78          AMOLED           120            50.0             32.0        1    0       15   39998
+3    MediaTek     POCO       8     256              6550                  6.67          AMOLED           120            50.0             20.0        1    0       15   23998
+4     Samsung  Samsung       8     128              5000                  6.70          AMOLED           120            50.0             12.0        1    0       15   38999
+5     Samsung  Samsung       8     128              5000                  6.60          AMOLED           120            50.0             13.0        1    0       14   20290
+6    MediaTek     OPPO       1     256              6200                  6.83             LCD           120            50.0             50.0        1    0       15   49999
+7  Snapdragon  Samsung       1     256              5000                  6.90          AMOLED           120            50.0             12.0        1    0       15  117999
+
+### Cell 6
+                  column         type                                                     meaning            role in this notebook
+0              Processor  categorical  Chip family (MediaTek, Snapdragon, Samsung, Apple, Google)                Feature (one-hot)
+1                  Brand  categorical                Manufacturer name (contains naming variants)       Feature (cleaned, one-hot)
+2                 Ram_GB      numeric          RAM in GB (contains encoding problems, see Part C)               Feature (repaired)
+3                 Rom_GB      numeric                       Internal storage in GB (1 means 1 TB)               Feature (repaired)
+4       Battery_Capacity      numeric                                         Battery size in mAh                          Feature
+5   Display_Size(Inches)      numeric                                   Screen diagonal in inches                          Feature
+6        Display_Quality  categorical                                   Panel type: AMOLED or LCD                 Feature (binary)
+7           Refresh_Rate      numeric                                   Screen refresh rate in Hz                          Feature
+8         Rear_Camera_MP      numeric                            Main rear camera resolution (MP)                          Feature
+9        Front_Camera_MP      numeric                               Selfie camera resolution (MP)                          Feature
+10               Android       binary                                                1 if Android     Dropped (redundant with IOS)
+11                   IOS       binary                                                    1 if iOS                          Feature
+12               Version      numeric                              Operating-system major version                          Feature
+13                 Price      numeric                                         Launch price in INR  TARGET source (never a feature)
+
+### Cell 8
+                        dtype  missing  missing_%  n_unique
+Processor                 str        0       0.00         5
+Brand                     str        0       0.00        30
+Ram_GB                  int64        0       0.00         6
+Rom_GB                  int64        0       0.00         6
+Battery_Capacity        int64        0       0.00        99
+Display_Size(Inches)  float64        0       0.00        43
+Display_Quality           str        0       0.00         2
+Refresh_Rate            int64        0       0.00         5
+Rear_Camera_MP        float64        9       0.85        14
+Front_Camera_MP       float64        9       0.85        20
+Android                 int64        0       0.00         2
+IOS                     int64        0       0.00         2
+Version                 int64        0       0.00        10
+Price                   int64        0       0.00       505
+
+### Cell 8
+Exact duplicate rows : 7 (rows involved in a duplicate group: 13)
+Total missing cells  : 18
+
+Descriptive statistics (numeric columns):
+
+
+### Cell 8
+                       count      mean       std     min       25%      50%       75%        max
+Ram_GB                1056.0      5.48      2.89     1.0      1.00      6.0      8.00       8.00
+Rom_GB                1056.0    208.14    120.25     1.0    128.00    128.0    256.00     512.00
+Battery_Capacity      1056.0   5017.05    734.15  1060.0   4700.00   5000.0   5160.00    9600.00
+Display_Size(Inches)  1056.0      6.65      0.25     4.7      6.59      6.7      6.77       8.03
+Refresh_Rate          1056.0    113.79     18.31    60.0    120.00    120.0    120.00     165.00
+Rear_Camera_MP        1047.0     55.16     30.22     2.0     50.00     50.0     50.00     200.00
+Front_Camera_MP       1047.0     20.08     12.74     2.0     12.00     16.0     32.00      60.00
+Android               1056.0      0.94      0.24     0.0      1.00      1.0      1.00       1.00
+IOS                   1056.0      0.06      0.24     0.0      0.00      0.0      0.00       1.00
+Version               1056.0     13.43      1.56     9.0     12.00     14.0     14.00      18.00
+Price                 1056.0  34996.68  31488.87  7689.0  16498.75  23747.0  37998.25  189999.00
+
+### Cell 9
+Distinct brand labels : 30
+['AGM', 'Acer', 'Acera', 'Alcatel', 'Apple', 'Asus', 'Blackview', 'CMF', 'Galaxy', 'Google', 'HMD', 'Honor', 'Infinix', 'Itel', 'LG', 'Lava', 'Moto', 'Motorola', 'Nokia', 'Nothing', 'OPPO', 'OnePlus', 'POCO', 'Samsung', 'Tecno', 'Ulefone', 'Xiaomi', 'iQOO', 'realme', 'vivo']
+
+Ram_GB raw value counts : {1: 266, 2: 2, 4: 109, 5: 1, 6: 176, 8: 502}
+Rom_GB raw value counts : {1: 15, 8: 1, 64: 38, 128: 514, 256: 384, 512: 104}
+
+Median price (INR) by raw RAM value:
+
+
+### Cell 9
+        count    median    min     max
+Ram_GB                                
+1         266   39999.0  15455  189999
+2           2  104998.0  89997  119999
+4         109   11999.0   7689   94900
+5           1   15999.0  15999   15999
+6         176   15999.0   8909  184900
+8         502   22999.0   9699  161900
+
+### Cell 10
+<Figure size 1500x1000 with 4 Axes>
+
+### Cell 12
+Rows: 1,056 -> 1,049 after removing 7 exact duplicates
+Brand labels: 30 -> 27 after harmonisation
+Phones with ROM stored as '1' recoded to 1024 GB: 15
+Phones with RAM in {1, 2} recoded to 12 GB     : 267
+
+Brand counts after cleaning:
+{'Samsung': 163, 'Realme': 155, 'Vivo': 120, 'Xiaomi': 78, 'OnePlus': 68, 'iQOO': 68, 'Oppo': 66, 'Apple': 62, 'POCO': 51, 'Motorola': 51, 'Tecno': 32, 'Infinix': 31, 'Lava': 21, 'Nothing': 18, 'Google': 16, 'Asus': 11, 'Honor': 7, 'Acer': 5, 'Itel': 5, 'Alcatel': 5, 'CMF': 4, 'Ulefone': 4, 'Nokia': 3, 'HMD': 2, 'LG': 1, 'AGM': 1, 'Blackview': 1}
+
+
+### Cell 13
+Android and IOS are exact complements, so Android is dropped as redundant.
+
+Brands kept individually (>= 15 phones): ['Apple', 'Google', 'Infinix', 'Lava', 'Motorola', 'Nothing', 'OnePlus', 'Oppo', 'Other', 'POCO', 'Realme', 'Samsung', 'Tecno', 'Vivo', 'Xiaomi', 'iQOO']
+{'Samsung': 163, 'Realme': 155, 'Vivo': 120, 'Xiaomi': 78, 'OnePlus': 68, 'iQOO': 68, 'Oppo': 66, 'Apple': 62, 'POCO': 51, 'Motorola': 51, 'Other': 49, 'Tecno': 32, 'Infinix': 31, 'Lava': 21, 'Nothing': 18, 'Google': 16}
+
+Remaining missing values:
+rear_mp     9
+front_mp    9
+(These 9 missing camera values are imputed inside the modeling Pipeline, using training data only.)
+
+
+### Cell 15
+Tier thresholds (INR): Budget <= 18,990 < Mid-Range <= 30,999 < Premium
+
+
+### Cell 15
+            count    min   median     max  share_%
+price_tier                                        
+Budget        352   7689  14340.0   18990     33.6
+Mid-Range     348  18998  23772.0   30999     33.2
+Premium       349  31500  51799.0  189999     33.3
+
+### Cell 16
+Feature matrix: 1,049 rows x 34 features
+  numeric/engineered : 13  -> ['ram_gb', 'rom_gb', 'battery_mah', 'display_in', 'refresh_hz', 'rear_mp', 'front_mp', 'os_version', 'is_ios', 'is_amoled', 'camera_sum_mp', 'battery_per_inch', 'rom_per_ram']
+  one-hot columns    : 21
+
+Price is NOT in X (target leakage check): True
+
+
+### Cell 17
+            train  test
+price_tier             
+Budget        282    70
+Mid-Range     278    70
+Premium       279    70
+TOTAL         839   210
+
+### Cell 17
+Train: 839 phones | Test: 210 phones | classes stratified in both
+
+
+### Cell 19
+<Figure size 1900x520 with 3 Axes>
+
+### Cell 21
+<Figure size 1700x800 with 2 Axes>
+
+### Cell 23
+<Figure size 2000x1200 with 12 Axes>
+
+### Cell 25
+<Figure size 1500x1100 with 4 Axes>
+
+### Cell 25
+price_tier  Budget  Mid-Range  Premium
+processor                             
+Apple          0.0        0.0    100.0
+Google         0.0       12.5     87.5
+MediaTek      51.4       33.6     15.0
+Samsung       25.0       41.1     33.9
+Snapdragon    21.1       37.2     41.7
+
+### Cell 27
+<Figure size 2000x900 with 8 Axes>
+
+### Cell 27
+Median value of each core spec per tier:
+
+
+### Cell 27
+            ram_gb  rom_gb  battery_mah  display_in  refresh_hz  rear_mp  front_mp  os_version
+price_tier                                                                                    
+Budget         6.0   128.0       5000.0        6.67       120.0     50.0      13.0        14.0
+Mid-Range      8.0   256.0       5000.0        6.68       120.0     50.0      16.0        13.0
+Premium       12.0   256.0       4720.0        6.70       120.0     50.0      16.0        14.0
+
+### Cell 29
+<Figure size 1200x1000 with 2 Axes>
+
+### Cell 29
+Rank correlation with price (strongest first):
+
+
+### Cell 29
+                  spearman_rho
+rom_gb                   0.629
+ram_gb                   0.595
+front_mp                 0.385
+is_ios                   0.368
+battery_per_inch        -0.367
+is_amoled                0.334
+battery_mah             -0.315
+rom_per_ram              0.299
+refresh_hz               0.225
+camera_sum_mp            0.198
+display_in               0.127
+rear_mp                 -0.110
+os_version               0.108
+
+### Cell 31
+<Figure size 1078x960 with 14 Axes>
+
+### Cell 33
+<Figure size 1900x580 with 3 Axes>
+
+### Cell 33
+First 2 components explain 23.2% of variance; first 5 explain 42.6%.
+
+
+### Cell 36
+                  median_Budget  median_Mid  median_Premium      H   p_value  epsilon_sq  significant (p<0.001)
+feature                                                                                                        
+rom_gb                   128.00      256.00          256.00  368.2  1.12e-80        0.35                   True
+ram_gb                     6.00        8.00           12.00  349.8  1.08e-76        0.33                   True
+front_mp                  13.00       16.00           16.00  245.4  5.09e-54        0.23                   True
+is_amoled                  0.00        1.00            1.00  209.1  3.96e-46        0.20                   True
+camera_sum_mp             63.00       80.00           66.00  137.2  1.63e-30        0.13                   True
+is_ios                     0.00        0.00            0.00  132.0  2.13e-29        0.13                   True
+battery_per_inch         757.58      746.27          716.42  118.2  2.19e-26        0.11                   True
+rom_per_ram               21.33       21.33           32.00   97.2  7.75e-22        0.09                   True
+battery_mah             5000.00     5000.00         4720.00   81.7  1.81e-18        0.08                   True
+rear_mp                   50.00       50.00           50.00   65.4  6.43e-15        0.06                   True
+refresh_hz               120.00      120.00          120.00   56.8  4.68e-13        0.05                   True
+os_version                14.00       13.00           14.00   33.4  5.51e-08        0.03                   True
+display_in                 6.67        6.68            6.70   26.0  2.32e-06        0.02                   True
+
+### Cell 37
+                   chi2  dof   p_value  cramers_V
+feature                                          
+Display panel     209.3    2  3.59e-46      0.447
+Brand group       302.9   30  7.06e-47      0.380
+Processor family  273.0    8  2.25e-54      0.361
+Operating system  132.2    2  2.00e-29      0.355
+
+### Cell 38
+<Figure size 1600x650 with 2 Axes>
+
+### Cell 41
+Model 1/2: RANDOM FOREST
+  candidates x folds : 36 x 5 = 180 fits in 62s
+  best params        : {'max_depth': 10, 'max_features': 'sqrt', 'min_samples_leaf': 2, 'n_estimators': 200}
+  best CV macro-F1   : 0.7889
+
+
+### Cell 42
+Model 2/2: GRADIENT BOOSTING
+  candidates x folds : 24 x 5 = 120 fits in 49s
+  best params        : {'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 200, 'subsample': 1.0}
+  best CV macro-F1   : 0.8051
+
+
+### Cell 43
+
+Random Forest: top 8 of 36 candidates
+
+
+### Cell 43
+  max_depth max_features  min_samples_leaf  n_estimators  mean_test_score  std_test_score  mean_fit_time
+0        10         sqrt                 2           200           0.7889          0.0307         0.1929
+1        10         sqrt                 2           400           0.7820          0.0311         0.3642
+2      None         sqrt                 2           200           0.7819          0.0319         0.1899
+3        20         sqrt                 2           200           0.7819          0.0319         0.2227
+4        10         sqrt                 1           200           0.7806          0.0235         0.1959
+5      None         sqrt                 2           400           0.7793          0.0306         0.3794
+6        20         sqrt                 2           400           0.7793          0.0306         0.3638
+7      None         sqrt                 1           200           0.7782          0.0211         0.2040
+
+### Cell 43
+
+Gradient Boosting: top 8 of 24 candidates
+
+
+### Cell 43
+   learning_rate  max_depth  n_estimators  subsample  mean_test_score  std_test_score  mean_fit_time
+0           0.10          2           200        1.0           0.8051          0.0161         0.4091
+1           0.10          3           100        0.8           0.8008          0.0264         0.2569
+2           0.05          3           200        0.8           0.8008          0.0207         0.4871
+3           0.10          3           200        0.8           0.7978          0.0146         0.5097
+4           0.05          4           200        0.8           0.7978          0.0246         0.6467
+5           0.05          4           100        1.0           0.7960          0.0306         0.3510
+6           0.05          2           200        0.8           0.7956          0.0273         0.3727
+7           0.10          3           100        1.0           0.7955          0.0213         0.2735
+
+### Cell 44
+<Figure size 1500x1100 with 8 Axes>
+
+### Cell 47
+                   Accuracy  Balanced Acc  Precision (macro)  Recall (macro)  F1 (macro)  ROC-AUC (OvR)     MCC  Quad. Kappa  MAE (tier steps)
+Model                                                                                                                                         
+Random Forest        0.8095        0.8095             0.8078          0.8095      0.8083         0.9411  0.7146       0.8481            0.1952
+Gradient Boosting    0.8000        0.8000             0.7986          0.8000      0.7990         0.9471  0.7003       0.8410            0.2048
+
+### Cell 47
+Chance-level accuracy for 3 balanced classes = 0.333
+
+
+### Cell 48
+==================================================================
+Classification report: Random Forest
+==================================================================
+              precision    recall  f1-score   support
+
+      Budget      0.851     0.900     0.875        70
+   Mid-Range      0.731     0.700     0.715        70
+     Premium      0.841     0.829     0.835        70
+
+    accuracy                          0.810       210
+   macro avg      0.808     0.810     0.808       210
+weighted avg      0.808     0.810     0.808       210
+
+==================================================================
+Classification report: Gradient Boosting
+==================================================================
+              precision    recall  f1-score   support
+
+      Budget      0.824     0.871     0.847        70
+   Mid-Range      0.716     0.686     0.701        70
+     Premium      0.855     0.843     0.849        70
+
+    accuracy                          0.800       210
+   macro avg      0.799     0.800     0.799       210
+weighted avg      0.799     0.800     0.799       210
+
+
+
+### Cell 49
+<Figure size 1300x1100 with 4 Axes>
+
+### Cell 51
+<Figure size 1400x600 with 2 Axes>
+
+### Cell 53
+<Figure size 1400x600 with 2 Axes>
+
+### Cell 53
+                   Budget  Mid-Range  Premium  Mean_AP
+Random Forest       0.957      0.726    0.935    0.873
+Gradient Boosting   0.949      0.795    0.952    0.899
+
+### Cell 55
+<Figure size 1800x560 with 3 Axes>
+
+### Cell 55
+Mean Brier score (lower = better calibrated): {'Random Forest': np.float64(0.0936), 'Gradient Boosting': np.float64(0.0847)}
+
+
+### Cell 57
+<Figure size 1500x580 with 2 Axes>
+
+### Cell 57
+                   train@max  cv@max     gap  cv gain last step
+Model                                                          
+Random Forest         0.9029  0.7831  0.1198             0.0066
+Gradient Boosting     0.9149  0.8049  0.1100             0.0100
+
+### Cell 60
+<Figure size 1600x750 with 2 Axes>
+
+### Cell 60
+               Random Forest          Gradient Boosting
+0          front_mp (0.1175)            ram_gb (0.2292)
+1            ram_gb (0.1167)  battery_per_inch (0.1354)
+2            rom_gb (0.0956)          front_mp (0.1232)
+3  battery_per_inch (0.0955)        display_in (0.0832)
+4     camera_sum_mp (0.0736)            rom_gb (0.0599)
+5       battery_mah (0.0715)       rom_per_ram (0.0509)
+6        display_in (0.0661)       battery_mah (0.0418)
+7       rom_per_ram (0.0647)     camera_sum_mp (0.0374)
+8         is_amoled (0.0468)         is_amoled (0.0311)
+9        os_version (0.0372)            is_ios (0.0307)
+
+### Cell 62
+<Figure size 1600x700 with 2 Axes>
+
+### Cell 62
+Permutation importance (mean drop in macro-F1) for the union of each model's top-8 features:
+
+
+### Cell 62
+                  Random Forest  Gradient Boosting
+battery_per_inch         0.0403             0.0517
+display_in               0.0323             0.0468
+front_mp                 0.0339             0.0434
+is_amoled                0.0239             0.0216
+rom_gb                   0.0062             0.0295
+camera_sum_mp            0.0176             0.0169
+cpu_MediaTek             0.0149             0.0165
+brand_OnePlus            0.0136             0.0175
+battery_mah              0.0208             0.0009
+ram_gb                   0.0025             0.0184
+
+### Cell 64
+<Figure size 2400x800 with 12 Axes>
+
+### Cell 67
+                   mean macro-F1     std     min     max  95% CI low  95% CI high
+Model                                                                            
+Random Forest             0.7923  0.0249  0.7534  0.8397      0.7781       0.8066
+Gradient Boosting         0.8061  0.0208  0.7635  0.8387      0.7942       0.8180
+
+### Cell 67
+Note: hyper-parameters were tuned on the training split, so these CV numbers use all data and are slightly optimistic;
+      the held-out test metrics above remain the unbiased headline numbers.
+
+
+### Cell 68
+Paired Wilcoxon on 15 CV macro-F1 scores : W = 14.0, p = 0.0067   (mean diff RF - GB = -0.0138)
+Exact McNemar on 210 test phones : RF-only correct = 11, GB-only correct = 9, p = 0.8238
+Both correct: 159 | both wrong: 31
+
+Reading the two tests together:
+  * Repeated-CV folds overlap in their training data, so their scores are correlated and the Wilcoxon p-value is optimistic.
+  * McNemar on the single untouched test set is the more conservative check.
+  -> Mixed evidence: one test finds a small difference, the other does not. Treat the models as practically equivalent.
+
+
+### Cell 69
+<Figure size 2100x600 with 3 Axes>
+
+### Cell 72
+<Figure size 1400x520 with 2 Axes>
+
+### Cell 72
+Mean confidence when correct vs wrong:
+
+
+### Cell 72
+                   correct  wrong
+Random Forest        0.749  0.565
+Gradient Boosting    0.831  0.605
+
+### Cell 74
+                   OOF accuracy  OOF macro-F1  OOF ROC-AUC  off-by-1 tier errors  off-by-2 tier errors
+Random Forest            0.7931        0.7950       0.9308                 213.0                   4.0
+Gradient Boosting        0.7979        0.7988       0.9351                 209.0                   3.0
+
+### Cell 75
+<Figure size 1700x1200 with 4 Axes>
+
+### Cell 77
+Phones both models misclassify: 31 of 210 test phones
+
+
+### Cell 77
+        brand   processor  ram_gb  rom_gb  battery_mah  refresh_hz  price_inr price_tier         RF         GB
+248      POCO    MediaTek     8.0   256.0         5110         120      14899     Budget  Mid-Range  Mid-Range
+1033  Infinix    MediaTek     8.0   256.0         5000         120      15999     Budget  Mid-Range  Mid-Range
+458     Tecno    MediaTek     8.0   256.0         6000         144      15999     Budget  Mid-Range    Premium
+455    Realme    MediaTek     8.0   256.0         5000         120      16899     Budget  Mid-Range  Mid-Range
+780      Oppo    MediaTek     8.0   128.0         4310          60      16990     Budget  Mid-Range  Mid-Range
+754   OnePlus    MediaTek     6.0   128.0         4500          90      18990     Budget  Mid-Range  Mid-Range
+420      Vivo  Snapdragon     8.0   256.0         6500         120      18999  Mid-Range     Budget     Budget
+816     Tecno    MediaTek    12.0   256.0         6000         120      19380  Mid-Range    Premium    Premium
+842    Realme    MediaTek     6.0   128.0         5000          90      19490  Mid-Range     Budget     Budget
+923    Xiaomi  Snapdragon     8.0   128.0         4820         120      19840  Mid-Range     Budget     Budget
+448   Samsung     Samsung     6.0   128.0         6000         120      19999  Mid-Range     Budget     Budget
+370   Samsung     Samsung     6.0   128.0         5000         120      20950  Mid-Range     Budget     Budget
+
+### Cell 79
+                                             CV macro-F1 (train)  Test accuracy  Test macro-F1
+RAM treatment                                                                                 
+A. Raw RAM as stored (1 and 2 kept)                       0.7667         0.8000         0.7978
+B. Recoded to 12 GB (used in this notebook)               0.7889         0.8095         0.8083
+C. Treated as missing (median-imputed)                    0.7823         0.8381         0.8388
+
+### Cell 80
+<Figure size 1100x480 with 1 Axes>
+
+### Cell 83
+
+Entry phone  (4 GB / 64 GB, LCD, 5000 mAh, 60 Hz)  [Infinix, MediaTek] -> predicted tier probabilities
+
+
+### Cell 83
+                   Budget  Mid-Range  Premium
+Random Forest       0.925      0.068    0.007
+Gradient Boosting   0.997      0.002    0.001
+
+### Cell 83
+
+Mid phone    (8 GB / 128 GB, AMOLED, 5500 mAh, 120 Hz)  [Realme, MediaTek] -> predicted tier probabilities
+
+
+### Cell 83
+                   Budget  Mid-Range  Premium
+Random Forest       0.400      0.555    0.045
+Gradient Boosting   0.127      0.868    0.006
+
+### Cell 83
+
+Flagship     (12 GB / 512 GB, AMOLED, 144 Hz)  [Samsung, Snapdragon] -> predicted tier probabilities
+
+
+### Cell 83
+                   Budget  Mid-Range  Premium
+Random Forest       0.031      0.096    0.873
+Gradient Boosting   0.019      0.035    0.945
+
+### Cell 84
+Saved files:
+  chi_square_tests.csv                                  0.2 KB
+  cv_summary.csv                                        0.2 KB
+  feature_importance_impurity.csv                       1.8 KB
+  feature_importance_permutation.csv                    1.8 KB
+  feature_matrix.csv                                  172.6 KB
+  figures/fig01_data_quality_overview.png             441.3 KB
+  figures/fig02_price_distribution.png                303.9 KB
+  figures/fig03_brand_positioning.png                 389.1 KB
+  figures/fig04_feature_distributions.png             677.8 KB
+  figures/fig05_categorical_vs_tier.png               296.7 KB
+  figures/fig06_specs_by_tier_boxplots.png            311.6 KB
+  figures/fig07_correlation_heatmap.png               467.2 KB
+  figures/fig08_pairplot.png                          501.5 KB
+  figures/fig09_pca_projection.png                    556.6 KB
+  figures/fig10_effect_sizes.png                      274.0 KB
+  figures/fig11_hyperparameter_heatmaps.png           407.2 KB
+  figures/fig12_confusion_matrices.png                283.6 KB
+  figures/fig13_roc_curves.png                        295.6 KB
+  figures/fig14_precision_recall_curves.png           238.8 KB
+  figures/fig15_calibration_curves.png                421.4 KB
+  figures/fig16_learning_curves.png                   311.0 KB
+  figures/fig17_feature_importance.png                359.9 KB
+  figures/fig18_permutation_importance.png            308.2 KB
+  figures/fig19_partial_dependence.png                373.7 KB
+  figures/fig20_model_comparison.png                  316.8 KB
+  figures/fig21_prediction_confidence.png             151.5 KB
+  figures/fig22_error_analysis.png                    754.2 KB
+  figures/fig23_ram_sensitivity.png                   263.5 KB
+  kruskal_wallis_tests.csv                              0.8 KB
+  mobiles_clean_dataset.csv                           104.4 KB
+  model_results.csv                                     0.3 KB
+  price_tier_models.joblib                           3401.0 KB
+  ram_sensitivity.csv                                   0.2 KB
+
+Figures generated: 23
+
+
+### Cell 86
+==================================================================================
+FINAL SUMMARY
+==================================================================================
+Dataset        : 1,056 raw rows -> 1,049 clean phones, 34 features (27 brands)
+Target         : 3 price tiers (cut-offs Rs 18,990 / Rs 30,999), ~equal class sizes
+Models         : Random Forest, Gradient Boosting (Pipeline: median imputer + classifier)
+Test set       : 210 phones
+----------------------------------------------------------------------------------
+                   Accuracy  F1 (macro)  ROC-AUC (OvR)     MCC  Quad. Kappa
+Model                                                                      
+Random Forest        0.8095      0.8083         0.9411  0.7146       0.8481
+Gradient Boosting    0.8000      0.7990         0.9471  0.7003       0.8410
+----------------------------------------------------------------------------------
+Higher test macro-F1 : Random Forest
+Top permutation features (RF) : battery_per_inch, front_mp, display_in, is_amoled
+Top permutation features (GB) : battery_per_inch, display_in, front_mp, rom_gb
+Model difference tests : Wilcoxon on CV folds p = 0.007 | McNemar on test set p = 0.824
+==================================================================================
+
